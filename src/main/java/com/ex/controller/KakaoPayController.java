@@ -23,17 +23,25 @@ public class KakaoPayController {
     private final KakaoPayService kakaoPay;
     private final AdmissionsService admissionsService;
     private final SubscriptionsService subscriptionsService;
-    private final DogAssignmentsService dogAssignmentsService;
+    private final DogAssignmentsService dogAssignmentsService;  
+    private String auto;
 
     @PostMapping("/kakaoPay")
-    public String kakaoPay(KakaoPayDTO kakaoDTO, Principal principal, @RequestParam("admissionId") int admissionId){
+    public String kakaoPay(KakaoPayDTO kakaoDTO, Principal principal, @RequestParam("admissionId") int admissionId, @RequestParam("autoRenewal") String auto){
+    	String redirectUrl = null;
+    	Integer admission_id = admissionId;
     	kakaoDTO.setPartner_user_id(principal.getName());
     	String partner_order_id = UUID.randomUUID().toString().replace("-", "");
     	kakaoDTO.setPartner_order_id(partner_order_id);
-    	kakaoDTO.setAdmissioId(admissionId);
-    	Integer admission_id = admissionId;   	   	
-    	String redirectUrl = "redirect:" + kakaoPay.kakaoPayReady(kakaoDTO) + "?admissionId=" + admission_id;
-    	return redirectUrl;
+    	kakaoDTO.setAdmissioId(admissionId);    	
+    	
+    	if(auto==null) {	    	
+	    	redirectUrl = "redirect:" + kakaoPay.kakaoPayReady(kakaoDTO) + "?admissionId=" + admission_id;
+		 }else {
+			 this.auto = auto;
+			redirectUrl = "redirect:" + kakaoPay.kakaoPayReady2(kakaoDTO) + "?admissionId=" + admission_id;		   
+		 }
+    	 return 	redirectUrl;
     }
 
     @GetMapping("/kakaoPaySuccess")
@@ -41,11 +49,17 @@ public class KakaoPayController {
                                   RedirectAttributes redirectAttributes,
                                   @RequestParam("admissionId") int admissionId,
                                   Principal principal) {
-        KakaoPayDTO kakaoDTO = kakaoPay.payApprove(pgToken);
+    	KakaoPayDTO kakaoDTO = null;
+    	if(auto==null) {
+    		kakaoDTO = kakaoPay.payApprove(pgToken);
+    	}else{
+    		kakaoDTO = kakaoPay.payApprove2(pgToken);
+    	}
+        
         
         String reason = null;
         admissionsService.updateAdmissionStatus(admissionId, "DONE", reason);
-        
+        kakaoDTO.setAuto(auto);
         SubscriptionsEntity subs = subscriptionsService.createSubscription(principal.getName(), admissionId, kakaoDTO);
         admissionsService.setSubscription(subs, admissionId);
         

@@ -268,6 +268,7 @@
                  sec:authorize="hasRole('ROLE_USER')">
 				<div class="col-12 text-end">
 					<form th:if="${#strings.equals(admission.status, 'APPROVED')}" action="/kakao/kakaoPay" method="post">
+						<input type="checkbox" name="autoRenewal" value="Y"> 자동결제
 						<input type="hidden" name="admissionId" th:value="${admission.admissionId}">
 						<input type="hidden" name="item_name" th:value="${admission.branch.name}">
 						<input type="hidden" name="total_amount" th:value="${admission.monthcaregroups.ticket.price}">
