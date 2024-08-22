@@ -39,7 +39,7 @@
 
     <div class="container">
         <h2 class="text-center mb-4 form-title">백신접종등록</h2>
-       <form id="vaccinationForm" th:action="@{/vaccinations/save}" method="post" enctype="multipart/form-data" onsubmit="return validateForm()">
+       <form th:action="@{/vaccinations/save}" method="post" enctype="multipart/form-data">
             <div th:if="${not #lists.isEmpty(userDogs)}" class="card mb-4">
                 <div class="card-header section-title">
                     <i class="fas fa-dog mr-2"></i>강아지 정보
@@ -142,16 +142,6 @@
         function toggleOtherVaccine(checkbox) {
             var otherVaccineDiv = document.getElementById('otherVaccineDiv');
             otherVaccineDiv.style.display = checkbox.checked ? 'block' : 'none';
-        }
-
-        function validateForm() {
-            var dogSelect = document.getElementById('dogSelect');
-            if (dogSelect.value === "") {
-                alert("강아지를 선택해주세요.");
-                dogSelect.focus();
-                return false;
-            }
-            return true;
         }
 
         document.addEventListener('DOMContentLoaded', function() {
