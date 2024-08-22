@@ -17,14 +17,12 @@
     <nav th:replace="~{navbar::navbarFragment}"></nav>
     <div class="container">
         <h2 class="text-center mb-4">출석부 등록</h2>
-
         <form th:action="@{/attendance/create}" method="post">
-			<input type="hidden" id="branch" name="branch" value="${brancheEntity}">
+			<input type="hidden" id="branch" name="branch" th:value="${brancheEntity.branchId}">
 			<div class="form-group">
                 <label for="attendanceDate">일자</label>
                 <input type="date" class="form-control" id="attendanceDate" name="attendancedate" required>
             </div>
-
             <div class="form-group">
                 <label for="groupSelect">반</label>
 <!--                <select class="form-control" id="groupSelect" name="monthgroupId" required>-->
@@ -33,26 +31,21 @@
                     <option th:each="group : ${monthGroupList}" th:value="${group.id}" th:text="${group.name}"></option>
                 </select>
             </div>
-
             <div class="form-group">
                 <label for="dogSelect">강아지 이름</label>
-<!--                <select class="form-control" id="dogId" name="dogId" required>-->
                 <select class="form-control" id="dog" name="dog" required>
                     <option value="">강아지를 선택해주세요</option>
                     <option th:each="dog : ${dogList}" th:value="${dog.dogId}" th:text="${dog.dogname}"></option>
                 </select>
             </div>
-
             <div class="form-group">
                 <label for="status">출석 상태</label>
                 <input type="text" class="form-control" id="status" name="status" required>
             </div>
-
             <div class="form-group">
                 <label for="notes">특이사항</label>
                 <textarea class="form-control" id="notes" name="notes"></textarea>
             </div>
-
             <button type="submit" class="btn btn-primary">등록</button>
         </form>
     </div>
