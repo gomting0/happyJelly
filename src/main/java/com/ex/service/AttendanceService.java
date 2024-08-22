@@ -156,7 +156,10 @@ public class AttendanceService {
 	
 	
 	// 출석부 등록
-	public void createAttendance(BranchEntity branchEntity, AttendanceDTO attendanceDTO) {
+	public void createAttendance(Integer branchId, AttendanceDTO attendanceDTO) {
+//		public void createAttendance(BranchEntity branchEntity, AttendanceDTO attendanceDTO) {
+		
+		BranchEntity branchEntity = branchesRepository.findById(branchId).get();
 		
         // DTO를 엔티티로 변환
         AttendanceEntity attendanceEntity = AttendanceEntity.builder()
@@ -221,7 +224,7 @@ public class AttendanceService {
             attendanceDTO.setMonthgroup(me);
             
             // 출석부 등록 메서드 호출
-            createAttendance(admissionDTO.getBranch(), attendanceDTO);
+            createAttendance(admissionDTO.getBranch().getBranchId(), attendanceDTO);
         }
     }
 	
