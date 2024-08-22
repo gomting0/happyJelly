@@ -18,7 +18,7 @@ import java.util.Map;
 @Log
 public class KakaoPayService {
     
-	private static final String Host = "https://open-api.kakaopay.com";
+   private static final String Host = "https://open-api.kakaopay.com";
     private KakaoPayDTO kakaoPayDTO;
 
     public String kakaoPayReady(KakaoPayDTO kakaoPayDTO) {
@@ -26,7 +26,7 @@ public class KakaoPayService {
         restTemplate.setRequestFactory(new HttpComponentsClientHttpRequestFactory()); // 정확한 에러 파악을 위해 생성
         
         HttpHeaders headers = new HttpHeaders();
-        							          
+                                       
         headers.set("Authorization", "SECRET_KEY" + " " + "DEV5F6A81032EF3CCD3CC043893620903DA50EB2");
         headers.set("Content-type", "application/json");
         
@@ -58,7 +58,7 @@ public class KakaoPayService {
             return this.kakaoPayDTO.getNext_redirect_pc_url();
             
         } catch (RestClientException e) {
-            e.printStackTrace();		
+            e.printStackTrace();      
         } catch (URISyntaxException e) {
             e.printStackTrace();
         }
@@ -69,8 +69,8 @@ public class KakaoPayService {
     // 카카오페이 결제 승인
     // 사용자가 결제 수단을 선택하고 비밀번호를 입력해 결제 인증을 완료한 뒤, 최종적으로 결제 완료 처리를 하는 단계
     public KakaoPayDTO payApprove(String pgToken) {
-    	Map<String, String> parameters = new HashMap<>();
-        HttpHeaders headers = new HttpHeaders();     						
+       Map<String, String> parameters = new HashMap<>();
+        HttpHeaders headers = new HttpHeaders();                       
         headers.set("Authorization", "SECRET_KEY" + " " + "DEV5F6A81032EF3CCD3CC043893620903DA50EB2");
         headers.set("Content-type", "application/json");
         
@@ -95,7 +95,7 @@ public class KakaoPayService {
         restTemplate.setRequestFactory(new HttpComponentsClientHttpRequestFactory()); // 정확한 에러 파악을 위해 생성
         
         HttpHeaders headers = new HttpHeaders();
-        							          
+                                       
         headers.set("Authorization", "SECRET_KEY" + " " + "DEV5F6A81032EF3CCD3CC043893620903DA50EB2");
         headers.set("Content-type", "application/json");
         
@@ -127,7 +127,7 @@ public class KakaoPayService {
             return this.kakaoPayDTO.getNext_redirect_pc_url();
             
         } catch (RestClientException e) {
-            e.printStackTrace();		
+            e.printStackTrace();      
         } catch (URISyntaxException e) {
             e.printStackTrace();
         }
@@ -138,8 +138,8 @@ public class KakaoPayService {
     // 카카오페이 결제 승인
     // 사용자가 결제 수단을 선택하고 비밀번호를 입력해 결제 인증을 완료한 뒤, 최종적으로 결제 완료 처리를 하는 단계
     public KakaoPayDTO payApprove2(String pgToken) {
-    	Map<String, String> parameters = new HashMap<>();
-        HttpHeaders headers = new HttpHeaders();     						
+       Map<String, String> parameters = new HashMap<>();
+        HttpHeaders headers = new HttpHeaders();                       
         headers.set("Authorization", "SECRET_KEY" + " " + "DEV5F6A81032EF3CCD3CC043893620903DA50EB2");
         headers.set("Content-type", "application/json");
         

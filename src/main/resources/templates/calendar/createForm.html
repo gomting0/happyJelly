@@ -1,8 +1,6 @@
 <html layout:decorate="~{layout}">
     <div layout:fragment="content" class="container my-3">
 		<form action="/calendar/create" method="post">
-		<!-- 가끔 자동으로 안생길때가 있더라 -->
-<!--			<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />-->
 			<input type="hidden" th:name="selectDate" th:value="${selectDate}" />
 
 			<div class="border-bottom my-3 pb-2">

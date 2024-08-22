@@ -6,9 +6,6 @@
 	<title>출석부</title>
 	<link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.min.css}">
 	<style>
-		body {
-            font-family: 'Noto Sans KR', sans-serif;
-        }
 		.container {
 			margin-top: 50px;
 		}
@@ -37,7 +34,6 @@
 			/* 버튼과의 간격을 위한 여백 설정 */
 		}
 	</style>
-	<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap" rel="stylesheet">
 </head>
 
 <body>
@@ -48,14 +44,13 @@
 		<!-- Flexbox를 사용한 날짜와 버튼의 가로 배치 -->
 		<div class="date-navigation">
 			<button class="btn btn-primary" onclick="navigateDate(-1)">&lt;</button>
-			<h3 id="currentDateText" th:text="${currentDate}">2024-07-11</h3>
+			<h3 id="selectDate" name="selectDate" th:text="${currentDate}">2024-07-11</h3>
 			<button class="btn btn-primary" onclick="navigateDate(1)">&gt;</button>
 		</div>
 		<table>
 			<tr>
 				<th><span th:text="${brancheDTO.branchesName}"></span></th>
 				<td>
-<!--					<select id="groupSelect" name="mothcaregroups.id" required onchange="updateGroups()">-->
 					<select id="groupSelect" name="monthGroupList" required onchange="updateGroups()">
 						<option value="">반을 선택해주세요</option>
 						<option th:each="group : ${monthGroupList}" 
@@ -87,14 +82,18 @@
 			<tbody>
 				<tr th:each="attendance : ${attendances}">
 					<td th:text="${attendance.attendancedate}"></td>
-<!--					<td th:text="${attendance.monthgroup}"></td>-->
-<!--					<td th:text="${attendance.dog.dogname}"></td>-->
 					<td th:text="${attendance.monthgroup != null ? attendance.monthgroup.name : 'N/A'}"></td>
-					<td th:text="${attendance.dog != null ? attendance.dog.dogname : 'N/A'}"></td>
+					<td><a th:href="@{'/attendance/details/' + ${attendance.id}}" th:text="${attendance.dog != null ? attendance.dog.dogname : 'N/A'}"></a></td>
 					<td th:text="${attendance.status}"></td>
 					<td th:text="${attendance.notes}"></td>
 					<td>
-						<button class="btn btn-info" onclick="navigateToAlert(/* 여기에 attendance.id */)">알림장</button>
+						<button class="btn btn-info" 
+								th:if="${attendance.dailyreport} == null" 
+								th:onclick="'createDailyReport('+${attendance.id}+')'">알림장</button>
+					
+						<button class="btn btn-secondary" 
+					            th:if="${attendance.dailyreport != null}" 
+					            th:onclick="'viewDailyReport(' + ${attendance.dailyreport} + ')'">알림장 조회하기</button>
 					</td>
 				</tr>
 			</tbody>
@@ -104,10 +103,8 @@
 <script>
 	function navigateDate(offset) {
 		// 현재 화면에 표시된 날짜를 가져옴
-		var currentDateText = document.getElementById('currentDateText').textContent;
-		var currentDate = new Date(currentDateText);
-		console.log("날자 ::: " + currentDate);
-		alert(currentDate);
+		var selectDate = document.getElementById('selectDate').textContent;
+		var currentDate = new Date(selectDate);
 
 		// offset을 적용하여 새로운 날짜를 계산함
 		currentDate.setDate(currentDate.getDate() + offset);
@@ -116,14 +113,25 @@
 		window.location.href = `/attendance?date=${currentDate.toISOString().split('T')[0]}`;
 	}
 
-	function navigateToAlert(attendanceId) {
-		// 알림장 작성 여부에 따라 알림장 화면으로 이동
-		window.location.href = `/alert/${attendanceId}`;
+	// 알림장 작성 화면으로 이동
+	function createDailyReport(attendanceId) {
+		console.log("알림장 작성");
+		console.log(attendanceId);
+		var selectDate = document.getElementById('selectDate').textContent;
+		console.log(selectDate);
+		window.location.href = "/calendar/createForm?selectDate="+selectDate+"&attId="+attendanceId;
+		// window.location.href = `/alert/${attendanceId}`;
+	}
+	
+	// 알림장 조회 화면으로 이동
+	function viewDailyReport(attendanceId) {
+		console.log("알림장 조회");
+	    // window.location.href = `/dailyreport/select/${attendance.dailyreport.id}`;
 	}
 	
 	function updateGroups() {
-		var currentDatee = document.getElementById('currentDateText').textContent;
-		var currentDate = new Date(currentDateText);
+		var currentDatee = document.getElementById('selectDate').textContent;
+		var currentDate = new Date(selectDate);
 		
 		var selectElement = document.getElementById("groupSelect");
         var selectMonthGroup = selectElement.value;
@@ -134,5 +142,4 @@
 
 </script>
 </body>
-
 </html>

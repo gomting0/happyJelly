@@ -70,7 +70,7 @@ public class TicketService {
 		if (ticketDTO.getGroupType().equals("DAYCARE")) {
 		    day = null;
 		} else {
-			day = ticketDTO.getDayofweek().replace(",","");
+			day = ticketDTO.getDayofweek();
 		}
         TicketEntity ticket = TicketEntity.builder()
         						.ticketname(ticketDTO.getTicketname())

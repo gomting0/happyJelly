@@ -41,10 +41,6 @@
                 <label for="dogSelect">강아지 이름</label>
 				<input type="hidden" class="form-control" id="dog" name="dog" th:value="${attendance.dog.dogId}" th:disabled="${mode == 'view'}" required>
 				<input type="text" class="form-control" id="dog" name="dog" th:value="${attendance.dog.dogname}" th:disabled="${mode == 'view'}" required>
-<!--                <select class="form-control" id="dog" name="dog" th:disabled="${mode == 'view'}" required>-->
-<!--                    <option value="">강아지를 선택해주세요</option>-->
-<!--                    <option th:each="dog : ${dogList}" th:value="${dog.dogId}" th:text="${dog.dogname}" th:selected="${attendance.dog.dogId == dog.dogId}"></option>-->
-<!--                </select>-->
             </div>
 			<div class="form-group">
 			    <label for="status">출석 상태</label>
