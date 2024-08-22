@@ -37,13 +37,13 @@
             <div class="form-group" th:if="${ticketDTO.groupType != 'DAYCARE'}">
                 <label for="dayofweek">요일</label>
                 <div>
-                    <label><input type="checkbox" name="dayofweek" value="1" th:checked="${#strings.contains(ticketDTO.dayofweek, '1')}" disabled> 일요일</label>
-                    <label><input type="checkbox" name="dayofweek" value="2" th:checked="${#strings.contains(ticketDTO.dayofweek, '2')}" disabled> 월요일</label>
-                    <label><input type="checkbox" name="dayofweek" value="3" th:checked="${#strings.contains(ticketDTO.dayofweek, '3')}" disabled> 화요일</label>
-                    <label><input type="checkbox" name="dayofweek" value="4" th:checked="${#strings.contains(ticketDTO.dayofweek, '4')}" disabled> 수요일</label>
-                    <label><input type="checkbox" name="dayofweek" value="5" th:checked="${#strings.contains(ticketDTO.dayofweek, '5')}" disabled> 목요일</label>
-                    <label><input type="checkbox" name="dayofweek" value="6" th:checked="${#strings.contains(ticketDTO.dayofweek, '6')}" disabled> 금요일</label>
-                    <label><input type="checkbox" name="dayofweek" value="7" th:checked="${#strings.contains(ticketDTO.dayofweek, '7')}" disabled> 토요일</label>
+                    <label><input type="checkbox" name="dayofweek" value="1" th:checked="${#strings.contains(ticketDTO.dayofweek, '1')}" disabled> 월요일</label>
+                    <label><input type="checkbox" name="dayofweek" value="2" th:checked="${#strings.contains(ticketDTO.dayofweek, '2')}" disabled> 화요일</label>
+                    <label><input type="checkbox" name="dayofweek" value="3" th:checked="${#strings.contains(ticketDTO.dayofweek, '3')}" disabled> 수요일</label>
+                    <label><input type="checkbox" name="dayofweek" value="4" th:checked="${#strings.contains(ticketDTO.dayofweek, '4')}" disabled> 목요일</label>
+                    <label><input type="checkbox" name="dayofweek" value="5" th:checked="${#strings.contains(ticketDTO.dayofweek, '5')}" disabled> 금요일</label>
+                    <label><input type="checkbox" name="dayofweek" value="6" th:checked="${#strings.contains(ticketDTO.dayofweek, '6')}" disabled> 토요일</label>
+                    <label><input type="checkbox" name="dayofweek" value="7" th:checked="${#strings.contains(ticketDTO.dayofweek, '7')}" disabled> 일일</label>
                 </div>
             </div>
             <div class="form-group" th:if="${ticketDTO.groupType == 'DAYCARE'}">

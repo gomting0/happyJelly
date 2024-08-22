@@ -2,8 +2,11 @@ package com.ex.service;
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,6 +21,7 @@ import com.ex.entity.MembersEntity;
 import com.ex.entity.MonthcareGroupsEntity;
 import com.ex.entity.SubscriptionsEntity;
 import com.ex.repository.AttendanceRepository;
+import com.ex.repository.BranchesRepository;
 import com.ex.repository.DogsRepository;
 import com.ex.repository.MembersRepository;
 import com.ex.repository.MonthcareGroupsRepository;
@@ -36,6 +40,8 @@ public class AttendanceService {
 	MonthcareGroupsRepository monthcareGroupsRepository;
 	@Autowired
 	DogsRepository dogsRepository;
+	@Autowired
+	BranchesRepository branchesRepository;
 	private final AdmissionsService admissionsService;
 	
 	private final TestMapper testMapper;
@@ -150,31 +156,33 @@ public class AttendanceService {
 	
 	
 	// 출석부 등록
-	public void createAttendance(Integer branchId, AttendanceDTO attendanceDTO) {
-		BranchEntity be = new BranchEntity();
-    	be.setBranchId(branchId);
+	public void createAttendance(BranchEntity branchEntity, AttendanceDTO attendanceDTO) {
 		
         // DTO를 엔티티로 변환
-        AttendanceEntity attendanceEntity = new AttendanceEntity();
-        attendanceEntity.setAttendancedate(attendanceDTO.getAttendancedate());
-        attendanceEntity.setDog(attendanceDTO.getDog());
-        attendanceEntity.setMonthgroup(attendanceDTO.getMonthgroup());
-        attendanceEntity.setStatus(attendanceDTO.getStatus());
-        attendanceEntity.setNotes(attendanceDTO.getNotes());
-        attendanceEntity.setBranch(be);
+        AttendanceEntity attendanceEntity = AttendanceEntity.builder()
+        		.attendancedate(attendanceDTO.getAttendancedate())
+        		.status(attendanceDTO.getStatus())
+        		.notes(attendanceDTO.getNotes())
+        		.branch(branchEntity)
+        		.dog(attendanceDTO.getDog())
+        		.monthgroup(attendanceDTO.getMonthgroup())
+        		.build();
 
         // 데이터베이스에 저장
         attendanceRepository.save(attendanceEntity);
+        
     }
 	
-	
+
 	// 결제 > 입학완료 > 개배정 > 사용자의 티켓 요일정보에 따른 한달치 출석부 세팅 일~토 1~7
     public void setMonthAttendance(SubscriptionsEntity subs, int admissionId) {
+    	System.out.println(subs);
+    	System.out.println(admissionId);
     	
     	// 구독티켓의 요일정보가져오기 (ex: "1,2,3" -> 일,월,화)
     	String dayOfWeekString = subs.getTicket().getDayofweek();
     	
-    	// 구독요일을 콤마로분리하여 리스트로 변환
+    	// 구독요일을 콤마로분리하여 리스트로 변환 ( "1,2,3" -> [1,2,3])
         String[] dayOfWeekArray = dayOfWeekString.split(",");
 
         // 현재날짜기준으로 다음달의 첫째날과 마지막날 계산
@@ -188,36 +196,33 @@ public class AttendanceService {
 
         // 첫째날부터 마지막날까지 반복
         for (LocalDate date = firstDayOfNextMonth; !date.isAfter(lastDayOfNextMonth); date = date.plusDays(1)) {
-            // 현재날짜의 요일 (1 = 일요일, 2 = 월요일, ... 7 = 토요일)
+        	// 현재날짜의 요일 (1 = 일요일, 2 = 월요일, ... 7 = 토요일)
             int dayOfWeekValue = date.getDayOfWeek().getValue();
-            if (dayOfWeekValue == 7) dayOfWeekValue = 1; // 일요일을 1로 맞추기
 
-            // 해당요일이 구독된요일리스트에 포함되면 출석부추가
-            for (String day : dayOfWeekArray) {
-                if (Integer.parseInt(day.trim()) == dayOfWeekValue) {
-                    attendanceDates.add(date);
-                    break;
-                }
+            // 구독 요일 리스트에 해당 요일이 포함되면 출석부에 추가
+            if (Arrays.asList(dayOfWeekArray).contains(String.valueOf(dayOfWeekValue))) {
+                attendanceDates.add(date);
             }
         }
-
+        
         AdmissionsDTO admissionDTO = admissionsService.getAdmissionById(admissionId);
         MonthcareGroupsEntity me = admissionDTO.getMonthcaregroups();
         
         // 출석 날짜들을 출석부에 저장
         for (LocalDate attendanceDate : attendanceDates) {
+        	
             // 출석부 등록을 위한 DTO 생성
             AttendanceDTO attendanceDTO = new AttendanceDTO();
             attendanceDTO.setAttendancedate(attendanceDate);
+            attendanceDTO.setStatus("PRESENT");		// 출석 상태 초기값 설정
+            attendanceDTO.setNotes("");  			// 특별한 노트 없음
             attendanceDTO.setDog(subs.getDogs());
+            attendanceDTO.setBranch(admissionDTO.getBranch());
             attendanceDTO.setMonthgroup(me);
-            attendanceDTO.setStatus("PRESENT");  // 출석 상태 초기값 설정
-            attendanceDTO.setNotes("");  // 특별한 노트 없음
             
             // 출석부 등록 메서드 호출
-            createAttendance(admissionDTO.getBranch().getBranchId(), attendanceDTO);
+            createAttendance(admissionDTO.getBranch(), attendanceDTO);
         }
-    	
     }
 	
 	
