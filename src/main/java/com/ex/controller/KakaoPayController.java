@@ -27,14 +27,14 @@ public class KakaoPayController {
     private String auto;
 
     @PostMapping("/kakaoPay")
-    public String kakaoPay(KakaoPayDTO kakaoDTO, Principal principal, @RequestParam("admissionId") int admissionId, @RequestParam("autoRenewal") String auto){
+    public String kakaoPay(KakaoPayDTO kakaoDTO, Principal principal, 
+    		@RequestParam("admissionId") int admissionId, @RequestParam("autoRenewal") String auto){
     	String redirectUrl = null;
     	Integer admission_id = admissionId;
     	kakaoDTO.setPartner_user_id(principal.getName());
     	String partner_order_id = UUID.randomUUID().toString().replace("-", "");
     	kakaoDTO.setPartner_order_id(partner_order_id);
-    	kakaoDTO.setAdmissioId(admissionId);    	
-    	
+    	kakaoDTO.setAdmissioId(admissionId);    	   	
     	if(auto==null) {	    	
 	    	redirectUrl = "redirect:" + kakaoPay.kakaoPayReady(kakaoDTO) + "?admissionId=" + admission_id;
 		 }else {
@@ -54,18 +54,14 @@ public class KakaoPayController {
     		kakaoDTO = kakaoPay.payApprove(pgToken);
     	}else{
     		kakaoDTO = kakaoPay.payApprove2(pgToken);
-    	}
-        
-        
+    	}       
         String reason = null;
         admissionsService.updateAdmissionStatus(admissionId, "DONE", reason);
         kakaoDTO.setAuto(auto);
         SubscriptionsEntity subs = subscriptionsService.createSubscription(principal.getName(), admissionId, kakaoDTO);
-        admissionsService.setSubscription(subs, admissionId);
-        
+        admissionsService.setSubscription(subs, admissionId);        
         //추가
-        dogAssignmentsService.assignDogToClass(admissionId);
-        
+        dogAssignmentsService.assignDogToClass(admissionId);        
         redirectAttributes.addFlashAttribute("kakaoDTO", kakaoDTO);
         return "redirect:/kakao/completed";
     }
