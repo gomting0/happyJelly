@@ -9,59 +9,60 @@
     <style>
         body {
             font-family: 'Noto Sans KR', sans-serif;
+            background-color: #fff9e6;
         }
         .container {
             margin-top: 50px;
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
         }
-        h2 {
-            margin-bottom: 30px;
-        }
+       h2 {
+        margin-bottom: 30px;
+        color: #333;  /* 노란색에서 진한 회색으로 변경 */
+        text-align: center;
+        font-weight: bold;  /* 글씨를 좀 더 굵게 만들어 강조 */
+    }
         .table th {
-            background-color: #f8f9fa;
+            background-color: #ffd700;
+            color: white;
         }
         .btn-container {
             margin-bottom: 20px;
             text-align: right;
         }
-        .status-pending {
-            color: #ff8c00 !important;
-            font-weight: bold;
-        }
-        .status-approved {
-            color: #008000 !important;
-            font-weight: bold;
-        }
-        .status-rejected {
-            color: rgb(191, 0, 24) !important;
-            font-weight: bold;
-        }
-        .status-canceled {
-            color: #6c757d !important;
-            font-weight: bold;
-        }
-        .status-done {
-            color: #0033CC !important;
-            font-weight: bold;
-        }
+        .status-pending { color: #ff8c00 !important; font-weight: bold; }
+        .status-approved { color: #008000 !important; font-weight: bold; }
+        .status-rejected { color: #bf0018 !important; font-weight: bold; }
+        .status-canceled { color: #6c757d !important; font-weight: bold; }
+        .status-done { color: #0033cc !important; font-weight: bold; }
         .pagination {
             margin-top: 20px;
         }
         .page-item.active .page-link {
-            background-color: #ffc107;
-            border-color: #ffc107;
+            background-color: #ffd700;
+            border-color: #ffd700;
         }
         .page-link {
             color: #000;
+        }
+        .btn-warning {
+            background-color: #ffd700;
+            border-color: #ffd700;
+        }
+        .btn-warning:hover {
+            background-color: #ffcc00;
+            border-color: #ffcc00;
         }
     </style>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
     <nav th:replace="~{navbar::navbarFragment}"></nav>
-    <div class="container my-5" layout:fragment="content">
-        <h2 class="text-center mb-4">입학 신청 목록</h2>
-
-        <!-- 상태 필터 추가 -->
+<div class="container my-5" layout:fragment="content">
+    <h2 style="color: #333; text-align: center; margin-bottom: 30px;">Happy Jelly 입학 신청 목록</h2>
+        <!-- 상태 필터 -->
         <div class="mb-3">
             <form id="statusForm" th:action="@{/admissions/admissionsList}" method="get" class="form-inline">
                 <input type="hidden" name="page" th:value="${admissionsList.number}">
@@ -75,6 +76,7 @@
                 </select>
             </form>
         </div>
+
         <!-- 관리자 및 디렉터용 뷰 -->
         <div th:if="${userType == 'ADMIN' or userType == 'DIRECTOR'}">
             <table class="table table-bordered table-hover">
@@ -117,7 +119,7 @@
                     </div>
                 </div>
                 <div class="col-md-6 text-center">
-                    <div class="alert alert-danger" role="alert">
+                    <div class="alert alert-warning" role="alert">
                         입학 신청을 위해 강아지를 먼저 등록해 주세요.   
                     </div>
                 </div>
@@ -125,7 +127,7 @@
             <div th:if="${dogsList != null and not #lists.isEmpty(dogsList)}">
                 <div class="row my-3">
                   <div class="col-12 text-end">
-                    <a th:href="@{/admissions}" class="btn btn-dark">입학 신청</a>
+                    <a th:href="@{/admissions}" class="btn btn-warning">입학 신청</a>
                   </div>
                 </div>
                 <table class="table table-bordered table-hover">
