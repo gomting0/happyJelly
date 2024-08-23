@@ -54,6 +54,7 @@ public class AdmissionsController {
             model.addAttribute("branches", branches);
             
             List<DogsEntity> dogsWithoutPendingAdmissions = new ArrayList<>();
+            // Map에는 중복된 값이 들어갈 수 없다. List는 가능하다.
             Map<Integer, List<MonthcareGroupsDTO>> branchGroups = new HashMap<>();
             for (BranchEntity branch : branches) {
                 List<MonthcareGroupsDTO> groups = admissionsService.getGroupsByBranch(branch.getBranchId());
