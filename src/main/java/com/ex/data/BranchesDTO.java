@@ -21,3 +21,4 @@ public class BranchesDTO {
     private Double latitude;
     private Double longitude;
 }
+
