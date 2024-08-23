@@ -29,7 +29,7 @@ public class KakaoPayController {
     private String auto;
 
     @PostMapping("/kakaoPay")
-    public String kakaoPay(KakaoPayDTO kakaoDTO, Principal principal, @RequestParam("admissionId") int admissionId, @RequestParam("autoRenewal") String auto){
+    public String kakaoPay(KakaoPayDTO kakaoDTO, Principal principal, @RequestParam("admissionId") int admissionId, @RequestParam(value="autoRenewal", required = false) String auto){
        String redirectUrl = null;
        Integer admission_id = admissionId;
        kakaoDTO.setPartner_user_id(principal.getName());
