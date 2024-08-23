@@ -177,30 +177,21 @@ public class AttendanceService {
     }
 	
 
-	// 결제 > 입학완료 > 개배정 > 사용자의 티켓 요일정보에 따른 한달치 출석부 세팅 일~토 1~7
     public void setMonthAttendance(SubscriptionsEntity subs, int admissionId) {
     	
-    	// 구독티켓의 요일정보가져오기 (ex: "1,2,3" -> 일,월,화)
     	String dayOfWeekString = subs.getTicket().getDayofweek();
-    	
-    	// 구독요일을 콤마로분리하여 리스트로 변환 ( "1,2,3" -> [1,2,3])
         String[] dayOfWeekArray = dayOfWeekString.split(",");
 
-        // 현재날짜기준으로 다음달의 첫째날과 마지막날 계산
         LocalDate today = LocalDate.now();
         YearMonth nextMonth = YearMonth.of(today.getYear(), today.plusMonths(1).getMonth());
         LocalDate firstDayOfNextMonth = nextMonth.atDay(1);
         LocalDate lastDayOfNextMonth = nextMonth.atEndOfMonth();
 
-        // 출석부에 넣을 날짜리스트
         List<LocalDate> attendanceDates = new ArrayList<>();
 
-        // 첫째날부터 마지막날까지 반복
         for (LocalDate date = firstDayOfNextMonth; !date.isAfter(lastDayOfNextMonth); date = date.plusDays(1)) {
-        	// 현재날짜의 요일 (1 = 일요일, 2 = 월요일, ... 7 = 토요일)
             int dayOfWeekValue = date.getDayOfWeek().getValue();
 
-            // 구독 요일 리스트에 해당 요일이 포함되면 출석부에 추가
             if (Arrays.asList(dayOfWeekArray).contains(String.valueOf(dayOfWeekValue))) {
                 attendanceDates.add(date);
             }
@@ -209,19 +200,15 @@ public class AttendanceService {
         AdmissionsDTO admissionDTO = admissionsService.getAdmissionById(admissionId);
         MonthcareGroupsEntity me = admissionDTO.getMonthcaregroups();
         
-        // 출석 날짜들을 출석부에 저장
         for (LocalDate attendanceDate : attendanceDates) {
-        	
-            // 출석부 등록을 위한 DTO 생성
             AttendanceDTO attendanceDTO = new AttendanceDTO();
             attendanceDTO.setAttendancedate(attendanceDate);
-            attendanceDTO.setStatus("PRESENT");		// 출석 상태 초기값 설정
-            attendanceDTO.setNotes("");  			// 특별한 노트 없음
+            attendanceDTO.setStatus("PRESENT");
+            attendanceDTO.setNotes("");
             attendanceDTO.setDog(subs.getDogs());
             attendanceDTO.setBranch(admissionDTO.getBranch());
             attendanceDTO.setMonthgroup(me);
             
-            // 출석부 등록 메서드 호출
             createAttendance(admissionDTO.getBranch().getBranchId(), attendanceDTO);
         }
     }
