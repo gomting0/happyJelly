@@ -32,8 +32,42 @@ public class DailyReportsService {
 	@Autowired
 	private AttendanceRepository attendanceRepository;
 	
-	// 캘린더 알림장 모두 조회
+	// 사용자별 알림장 출력
 	public List<DailyReportsDTO> getDailyReportsList(String username){
+		List<DailyReportsDTO> list = null;
+		DailyReportsDTO di = null;
+		
+		// 사용자 로그인 id로 사용자정보 조회
+		Optional<MembersEntity> op = membersRepository.findByUsername(username);
+		if(op.isPresent()) {
+			// 사용자정보로 알림장 조회
+			List<DailyReportsEntity> delist = dailyReportsRepository.findByMembers(op.get());
+			list = new ArrayList<>(delist.size());
+			for(DailyReportsEntity d: delist) {
+				di = new DailyReportsDTO().builder()
+						.id(d.getId())
+						.dogs(d.getDogs())
+						.attendance(d.getAttendance())
+						.report_date(d.getReport_date())
+						.behavior(d.getBehavior())
+						.activities(d.getActivities())
+						.meals(d.getMeals())
+						.health(d.getHealth())
+						.bowel(d.getBowel())
+						.contents(d.getContents())
+						.title(d.getTitle())
+						.build();
+						// .members(d.getMembers())
+				list.add(di);
+			}
+		}
+		return list;
+	}
+	
+	
+	
+	// 선생님별임.... 캘린더 알림장 모두 조회
+	public List<DailyReportsDTO> getDailyReportsListByTeacher(String username){
 		List<DailyReportsDTO> list = null;
 		DailyReportsDTO di = null;
 		
@@ -91,10 +125,13 @@ public class DailyReportsService {
 		LocalDate diarydate = LocalDate.parse(selectDate);
 		
 //		강아지id 멤버id
-		MembersEntity membersEntity = membersRepository.findByUsername(username).get();
+//		이건 선생님...
+//		MembersEntity membersEntity = membersRepository.findByUsername(username).get();
 		
 		// 출석부 상세조회
 		AttendanceEntity ae = attendanceRepository.findById(attendanceId).get();
+		
+		
 		System.out.println("ae.getDog() ::: " + ae.getDog());
 		
 		DailyReportsEntity de = DailyReportsEntity.builder()
@@ -108,7 +145,7 @@ public class DailyReportsService {
 								.bowel(dailyReportsDTO.getBowel())
 								.contents(dailyReportsDTO.getContents())
 								.title(dailyReportsDTO.getTitle())
-								.members(membersEntity)
+								.members(ae.getDog().getMember())
 								.build();
 		
 		de = dailyReportsRepository.save(de);

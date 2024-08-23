@@ -37,6 +37,15 @@
             color: #455a64;
             white-space: pre-line;
         }
+
+        .gallery img {
+            width: calc(100% - 20px);
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
     </style>
 </head>
 <body>
@@ -44,39 +53,55 @@
         <div class="header-section">
             <h2 th:text="${selectDate}"></h2>
         </div>
-        
+
         <div th:if="${daReportsDTO != null}">
-            <div class="content-section">
-                <label class="form-label">이름 :</label>
-                <span class="form-value" th:text="${daReportsDTO.dogs.dogname}"></span>
-            </div>
-            <div class="content-section">
-                <label class="form-label">기분 :</label>
-                <span class="form-value" th:text="${daReportsDTO.behavior}"></span>
-            </div>
-            <div class="content-section">
-                <label class="form-label">활동성 :</label>
-                <span class="form-value" th:text="${daReportsDTO.activities}"></span>
-            </div>
-            <div class="content-section">
-                <label class="form-label">식욕 :</label>
-                <span class="form-value" th:text="${daReportsDTO.meals}"></span>
-            </div>
-            <div class="content-section">
-                <label class="form-label">건강상태 :</label>
-                <span class="form-value" th:text="${daReportsDTO.health}"></span>
-            </div>
-            <div class="content-section">
-                <label class="form-label">배변활동 :</label>
-                <span class="form-value" th:text="${daReportsDTO.bowel}"></span>
-            </div>
             <div class="content-section">
                 <label class="form-label">제목 :</label>
                 <span class="form-value" th:text="${daReportsDTO.title}"></span>
             </div>
+            
+			<div class="row">
+                <!-- Left column -->
+                <div class="col-md-6">
+                    <div class="content-section">
+                        <label class="form-label">강아지 이름 :</label>
+                        <span class="form-value" th:text="${daReportsDTO.dogs.dogname}"></span>
+                    </div>
+                    <div class="content-section">
+                        <label class="form-label">활동성 :</label>
+                        <span class="form-value" th:text="${daReportsDTO.activities}"></span>
+                    </div>
+                    <div class="content-section">
+                        <label class="form-label">건강상태 :</label>
+                        <span class="form-value" th:text="${daReportsDTO.health}"></span>
+                    </div>
+                </div>
+
+                <!-- Right column -->
+                <div class="col-md-6">
+                    <div class="content-section">
+                        <label class="form-label">기분 :</label>
+                        <span class="form-value" th:text="${daReportsDTO.behavior}"></span>
+                    </div>
+                    <div class="content-section">
+                        <label class="form-label">식욕 :</label>
+                        <span class="form-value" th:text="${daReportsDTO.meals}"></span>
+                    </div>
+                    <div class="content-section">
+                        <label class="form-label">배변활동 :</label>
+                        <span class="form-value" th:text="${daReportsDTO.bowel}"></span>
+                    </div>
+                </div>
+            </div>
+
             <div class="content-section">
                 <label class="form-label">내용 :</label>
                 <div class="content-box" th:text="${daReportsDTO.contents}"></div>
+            </div>
+
+            <div class="content-section gallery">
+                <label class="form-label">사진 :</label><br />
+                <img src="/images/reportpoto/image-26.png" alt="강아지 사진 1">
             </div>
         </div>
 
@@ -85,6 +110,6 @@
                 해당 날짜에 작성된 다이어리가 없습니다.
             </div>
         </div>
-    </div>    
+    </div>
 </body>
 </html>
