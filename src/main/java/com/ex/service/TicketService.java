@@ -42,7 +42,6 @@ public class TicketService {
 					.dayofweek(t.getDayofweek())
 					.ticketcount(t.getTicketcount())
 					.build();
-			
 			list.add(tDto);
 		}
 		return list;
@@ -70,7 +69,7 @@ public class TicketService {
 		if (ticketDTO.getGroupType().equals("DAYCARE")) {
 		    day = null;
 		} else {
-			day = ticketDTO.getDayofweek().replace(",","");
+			day = ticketDTO.getDayofweek();
 		}
         TicketEntity ticket = TicketEntity.builder()
         						.ticketname(ticketDTO.getTicketname())
@@ -87,12 +86,7 @@ public class TicketService {
 	// 이용권 수정 (판매상태만 변경)
 	public void updateTicket(TicketDTO ticketDTO, Integer id) {
 		TicketEntity te = ticketRepository.findById(id).orElseThrow(() -> new RuntimeException("Ticket not found"));
-//		te.setTicketname(ticketDTO.getTicketname());
-//		te.setPrice(ticketDTO.getPrice());
-//		te.setGroupType(ticketDTO.getGroupType());
 		te.setSalesstatus(ticketDTO.getSalesstatus());
-//		te.setDayofweek(ticketDTO.getDayofweek());
-		
 		ticketRepository.save(te);
 	}
 

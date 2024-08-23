@@ -8,10 +8,9 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        body {
+  		body {
             font-family: 'Noto Sans KR', sans-serif;
-            background-color: #f8f9fa;
-            color: #333;
+            background-color: #fff9e6;
         }
         .container {
             max-width: 800px;
@@ -123,8 +122,8 @@
                         <tr>
                             <th>몸무게</th>
                             <td>
-                                <input type="number" step="0.1" name="weight" th:value="${userDogs[0].weight != null ? userDogs[0].weight : ''}" th:style="${userDogs[0].weight == null ? 'display: none;' : ''}">
-                                <span th:if="${userDogs[0].weight == null}">정보 없음</span>
+                                <input type="number" step="0.1" name="weight">
+                                <span style="display: none;">정보 없음</span>
                             </td>
                         </tr>
                         <tr>
@@ -295,17 +294,16 @@
             });
 
             var weightInput = document.querySelector('input[name="weight"]');
-            var weightSpan = weightInput && weightInput.nextElementSibling;
-            if (weightInput && weightSpan) {
-                if (selectedDog.weight != null) {
-                    weightInput.value = selectedDog.weight;
-                    weightInput.style.display = '';
-                    weightSpan.style.display = 'none';
-                } else {
-                    weightInput.value = '';
-                    weightInput.style.display = 'none';
-                    weightSpan.style.display = '';
-                }
+            var weightSpan = weightInput.nextElementSibling;
+            if (selectedDog.weight != null) {
+                weightInput.value = selectedDog.weight;
+                weightInput.style.display = '';
+                weightSpan.style.display = 'none';
+            } else {
+                weightInput.value = '';
+                weightInput.style.display = 'none';
+                weightSpan.textContent = '정보 없음';
+                weightSpan.style.display = '';
             }
         } 
     }
@@ -381,8 +379,6 @@
 
     console.log("Script loaded. Dog ID:", dogId);
     console.log("Branch groups:", branchGroups);
-    
-    
-</script>
+    </script>
 </body>
 </html>

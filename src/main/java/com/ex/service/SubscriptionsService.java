@@ -34,8 +34,15 @@ public class SubscriptionsService {
 		LocalDate nextMonthFirstDay = today.plusMonths(1).withDayOfMonth(1);
 		LocalDate nextMonthLastDay = nextMonthFirstDay.withDayOfMonth(nextMonthFirstDay.lengthOfMonth());
 		
+		String auto = null;
+		if(kakaoDTO.getAuto()==null) {
+			auto = "N";
+		}else {
+			auto = "Y";
+		}
+		
 		SubscriptionsEntity se = SubscriptionsEntity.builder().startDate(nextMonthFirstDay).endDate(nextMonthLastDay).admissions(ae)
-				.autoRenewal("Y").status("ACTIVE").paymentDate(kakaoDTO.getCreated_at()).dogs(ae.getDogs()).member(me)
+				.autoRenewal(auto).status("ACTIVE").paymentDate(kakaoDTO.getCreated_at()).dogs(ae.getDogs()).member(me)
 				.amount(Integer.parseInt(kakaoDTO.getTotal_amount())).paymethod(kakaoDTO.getPayment_method_type())
 				.ticket(ae.getMonthcaregroups().getTicket()).build();
 		subscriptionsRepository.save(se);

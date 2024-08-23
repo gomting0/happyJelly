@@ -35,7 +35,6 @@ public class DailyReportsController {
 	@GetMapping("select")
 	public String select(@RequestParam("selectDate") String selectDate,
 			@RequestParam("reportId") Integer reportId, Model model) {
-		System.out.println("reportId ::: " + reportId);
 		model.addAttribute("reportId", reportId);
 		model.addAttribute("selectDate", selectDate);
 		DailyReportsDTO daReportsDTO = dailyReportsService.getDailyReports(reportId);
@@ -46,13 +45,11 @@ public class DailyReportsController {
 	
 	// 알림장 작성폼
 	@GetMapping("create")
-	public String create(@RequestParam("selectDate") String selectDate,
-			Model model) {
-		System.out.println("일지등록 다이어리 컨트롤러 selectDate ::: " + selectDate);
+	public String create(@RequestParam("selectDate") String selectDate
+						, @RequestParam("attId") Integer attendanceId
+						, Model model) {
 		model.addAttribute("selectDate", selectDate);
-//		model.addAttribute("title", selectDate);
-//		model.addAttribute("contents", selectDate);
-//		model.addAttribute("_csrf.parameterName", selectDate);
+		model.addAttribute("attId", attendanceId);
 		return "calendar/createDailyReports";
 	}
 	
@@ -64,7 +61,7 @@ public class DailyReportsController {
 							, @RequestParam("attId") Integer attendanceId
 							, @RequestParam("selectDate") String selectDate) {
 		this.dailyReportsService.create(dailyReportsDTO, attendanceId, principal.getName(), selectDate);
-		return "redirect:calendar";
+		return "redirect:/attendance?date="+selectDate;
 	}
 	
 

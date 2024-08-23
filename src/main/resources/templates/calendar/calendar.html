@@ -1,85 +1,89 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-<meta charset='utf-8' />
-<script src='../js/index.global.js'></script>
-<script th:inline="javascript">
-	
-	document.addEventListener('DOMContentLoaded',function() {
-		var calendarEl = document.getElementById('calendar');
+    <meta charset="utf-8">
+    <title>Document</title>
+    <script src="../js/index.global.js"></script>
+    <script th:inline="javascript">
+        document.addEventListener('DOMContentLoaded', function() {
+            var calendarEl = document.getElementById('calendar');
 
-		// 현재 날짜와 시간을 가져오기
-		const currentDate = new Date();
-		const year = currentDate.getFullYear();
-		const month = currentDate.getMonth() + 1;
-		const day = currentDate.getDate();
-		const hours = currentDate.getHours();
-		const minutes = currentDate.getMinutes();
+            // 현재 날짜와 시간을 가져오기
+            const currentDate = new Date();
+            const year = currentDate.getFullYear();
+            const month = currentDate.getMonth() + 1;
+            const day = currentDate.getDate();
+            const hours = currentDate.getHours();
+            const minutes = currentDate.getMinutes();
 
-		// 날짜와 시간을 문자열로 포맷팅
-		const formattedDate = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-		//    const formattedDate = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')} ${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+            // 날짜와 시간을 문자열로 포맷팅
+            const formattedDate = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
 
-		var list = /*[[${list}]]*/[];
+            var list = /*[[${list}]]*/[];
 
-		eventDiarys = [];
-		//    eventDiarys.push([[${list}]]);   
-		//var diaryId = "";
- 		for (i = 0; i < list.length; i++) {
- 			eventDiarys.push({
- 				title : list[i].title,
- 				start : list[i].report_date,
- 				url : '/calendar/select?selectDate='
- 						+ list[i].report_date
-						+ '&reportId='
- 						+ list[i].id,
- 			});
- 		}
+            var eventDiarys = [];
+            for (let i = 0; i < list.length; i++) {
+                eventDiarys.push({
+                    title: list[i].dogs.dogname+" : "+list[i].title,
+                    start: list[i].report_date,
+                    url: '/calendar/select?selectDate=' + list[i].report_date + '&reportId=' + list[i].id,
+                });
+            }
 
-		var calendar = new FullCalendar.Calendar(calendarEl, {
-			initialDate : formattedDate,
-			//    navLinks: true, // can click day/week names to navigate views
-			editable : true,
-			selectable : true,
-			businessHours : true,
-			dayMaxEvents : true, // allow "more" link when too many events
-			selectMirror : true,
-			select : function(arg) {
-				window.location = "/calendar/create?selectDate="
-						+ arg.startStr;
-				calendar.unselect()
-			},
-			eventClick : function(info) {
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                initialDate: formattedDate,
+                editable: true,
+                selectable: true,
+                businessHours: true,
+                dayMaxEvents: true,
+                selectMirror: true,
+                select: function(arg) {
+                    window.location = "/attendance?date=" + arg.startStr;
+                    calendar.unselect();
+                },
+                eventClick: function(info) {
+                    info.jsEvent.preventDefault(); // don't let the browser navigate
+                    window.location = info.event.url;
+                },
+                events: eventDiarys
+            });
 
-				info.jsEvent.preventDefault(); // don't let the browser navigate
+            calendar.render();
+        });
+    </script>
+    <style>
+		body {
+		            margin: 40px 10px;
+		            padding: 0;
+		            font-family: Arial, Helvetica Neue, Helvetica, sans-serif;
+		            font-size: 14px;
+		            color: black !important; /* 모든 텍스트를 검은색으로 설정 */
+		        }
 
-				window.location = info.event.url;
+		        #calendar {
+		            max-width: 1100px;
+		            margin: 0 auto;
+		        }
+		/* 링크 색상 변경 */
+		a {
+		    color: black !important; /* 링크 색상 */
+			text-decoration: none !important; /* 링크의 밑줄 제거 */
 
-			},
-			events : eventDiarys
-				});
+		}
 
-				calendar.render();
-					});
-</script>
-<style>
-body {
-	margin: 40px 10px;
-	padding: 0;
-	font-family: Arial, Helvetica Neue, Helvetica, sans-serif;
-	font-size: 14px;
-}
-
-#calendar {
-	max-width: 1100px;
-	margin: 0 auto;
-}
-</style>
-<!-- <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.min.css}"> -->
+		a:hover,
+		a:focus {
+		    color: black !important; /* 호버 색상 */
+			text-decoration: none;
+			text-decoration: none !important; /* 호버 및 포커스 상태에서 밑줄 제거 */
+			
+		}
+    </style>
+    <!-- <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.min.css}"> -->
+    <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.min.css}">
 </head>
+<nav th:replace="~{navbar::navbarFragment}"></nav>
 <body>
-<!-- 	<nav th:replace="~{navbar::navbarFragment}"></nav> -->
-	<div id='calendar'></div>
-
+    <div id='calendar'></div>
 </body>
 </html>
-
