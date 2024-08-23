@@ -47,6 +47,10 @@
         
         <div th:if="${daReportsDTO != null}">
             <div class="content-section">
+                <label class="form-label">이름 :</label>
+                <span class="form-value" th:text="${daReportsDTO.dogs.dogname}"></span>
+            </div>
+            <div class="content-section">
                 <label class="form-label">기분 :</label>
                 <span class="form-value" th:text="${daReportsDTO.behavior}"></span>
             </div>

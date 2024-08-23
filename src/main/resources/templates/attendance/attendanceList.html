@@ -87,13 +87,13 @@
 					<td th:text="${attendance.status}"></td>
 					<td th:text="${attendance.notes}"></td>
 					<td>
-						<button class="btn btn-info" 
-								th:if="${attendance.dailyreport} == null" 
-								th:onclick="'createDailyReport('+${attendance.id}+')'">알림장</button>
-					
-						<button class="btn btn-secondary" 
+					    <button class="btn btn-secondary" 
 					            th:if="${attendance.dailyreport != null}" 
-					            th:onclick="'viewDailyReport(' + ${attendance.dailyreport} + ')'">알림장 조회하기</button>
+					            th:onclick="'viewDailyReport(' + ${attendance.dailyreport.id} + ')'">알림장 조회하기</button>
+					    <button class="btn btn-info" 
+					            th:if="${attendance.dailyreport == null}" 
+					            th:onclick="'createDailyReport(' + ${attendance.id} + ')'">알림장</button>
+					    
 					</td>
 				</tr>
 			</tbody>
@@ -115,18 +115,14 @@
 
 	// 알림장 작성 화면으로 이동
 	function createDailyReport(attendanceId) {
-		console.log("알림장 작성");
-		console.log(attendanceId);
 		var selectDate = document.getElementById('selectDate').textContent;
-		console.log(selectDate);
-		window.location.href = "/calendar/createForm?selectDate="+selectDate+"&attId="+attendanceId;
-		// window.location.href = `/alert/${attendanceId}`;
+		window.location.href = "/calendar/create?selectDate="+selectDate+"&attId="+attendanceId;
 	}
 	
 	// 알림장 조회 화면으로 이동
-	function viewDailyReport(attendanceId) {
-		console.log("알림장 조회");
-	    // window.location.href = `/dailyreport/select/${attendance.dailyreport.id}`;
+	function viewDailyReport(dailyreport) {
+		var selectDate = document.getElementById('selectDate').textContent;
+	    window.location.href = "/calendar/select?selectDate="+selectDate+"&reportId="+dailyreport;
 	}
 	
 	function updateGroups() {

@@ -90,7 +90,6 @@ public class AttendanceService {
 		
 		// 선택된 반이 있다면 반id로 해당일자 출석부 조회
 		if(monthgroup != null) {
-			System.out.println("(monthgroup != null 선택된 반 있음");
 			MonthcareGroupsEntity mge = new MonthcareGroupsEntity();
 			mge.setId(monthgroup);
 			return attendanceRepository.findByAttendancedateAndMonthgroup(attendancedate, mge)
@@ -127,19 +126,21 @@ public class AttendanceService {
     }
 	
 	
-	// 출석부 수정
+	// 출석부 출석상태 수정
 	public void updateAttendance(AttendanceDTO attendanceDTO) {
+		
+		AttendanceEntity oldae = attendanceRepository.findById(attendanceDTO.getId()).get();
 		
 		AttendanceEntity ae = AttendanceEntity.builder()
 				.id(attendanceDTO.getId())
-				.dog(attendanceDTO.getDog())
+				.dog(oldae.getDog())
 				.daygroup(attendanceDTO.getDaygroup())
 				.monthgroup(attendanceDTO.getMonthgroup())
 				.attendancedate(attendanceDTO.getAttendancedate())
 				.status(attendanceDTO.getStatus())
-				.dailyreport(attendanceDTO.getDailyreport())
+				.dailyreport(oldae.getDailyreport())
 				.notes(attendanceDTO.getNotes())
-				.branch(attendanceDTO.getBranch())
+				.branch(oldae.getBranch())
 				.build();
 				
 		attendanceRepository.save(ae);
@@ -148,7 +149,7 @@ public class AttendanceService {
 		// USER_TYPE == REGULAR >>> 특이사항만 수정
 		
 //		if(me.get().getUser_type().equals("REGULAR")) {
-//			System.out.println("regular");
+//			
 //		} else {
 //			
 //		}
@@ -157,7 +158,6 @@ public class AttendanceService {
 	
 	// 출석부 등록
 	public void createAttendance(Integer branchId, AttendanceDTO attendanceDTO) {
-//		public void createAttendance(BranchEntity branchEntity, AttendanceDTO attendanceDTO) {
 		
 		BranchEntity branchEntity = branchesRepository.findById(branchId).get();
 		
@@ -179,8 +179,6 @@ public class AttendanceService {
 
 	// 결제 > 입학완료 > 개배정 > 사용자의 티켓 요일정보에 따른 한달치 출석부 세팅 일~토 1~7
     public void setMonthAttendance(SubscriptionsEntity subs, int admissionId) {
-    	System.out.println(subs);
-    	System.out.println(admissionId);
     	
     	// 구독티켓의 요일정보가져오기 (ex: "1,2,3" -> 일,월,화)
     	String dayOfWeekString = subs.getTicket().getDayofweek();
@@ -237,7 +235,9 @@ public class AttendanceService {
 		dto.setMonthgroup(entity.getMonthgroup());
 		dto.setAttendancedate(entity.getAttendancedate());
 		dto.setStatus(entity.getStatus());
+		dto.setDailyreport(entity.getDailyreport());
 		dto.setNotes(entity.getNotes());
+		dto.setBranch(entity.getBranch());
 		return dto;
 	}
 	

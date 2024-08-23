@@ -108,7 +108,7 @@ public class AttendanceController {
     @PostMapping("/create")
     public String createAttendance(@RequestParam("branch") Integer branchId, AttendanceDTO attendanceDTO) {
     	attendanceService.createAttendance(branchId, attendanceDTO);
-        return "redirect:/attendance";
+        return "redirect:/attendance?date="+attendanceDTO.getAttendancedate();
     }
     
     
@@ -164,7 +164,8 @@ public class AttendanceController {
     	
     	attendanceService.updateAttendance(attendanceDTO);
     	
-    	return "redirect:/attendance";
+    	// 수정된 일자의 출석부 목록으로 이동
+    	return "redirect:/attendance?date="+attendanceDTO.getAttendancedate();
     }
 	
 }

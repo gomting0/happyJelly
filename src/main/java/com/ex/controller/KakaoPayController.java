@@ -60,12 +60,18 @@ public class KakaoPayController {
         
         
         String reason = null;
+        
+        // 입학 상태 변경
         admissionsService.updateAdmissionStatus(admissionId, "DONE", reason);
         kakaoDTO.setAuto(auto);
+        
+        // 구독정보 등록
         SubscriptionsEntity subs = subscriptionsService.createSubscription(principal.getName(), admissionId, kakaoDTO);
+       
+        // 입학정보에 구독정보 추가
         admissionsService.setSubscription(subs, admissionId);
         
-        //추가
+        // 강아지 반배정
         dogAssignmentsService.assignDogToClass(admissionId);
         
         // 출석부 등록

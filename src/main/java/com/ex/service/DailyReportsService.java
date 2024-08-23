@@ -1,4 +1,5 @@
 package com.ex.service;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -10,9 +11,11 @@ import com.ex.data.AttendanceDTO;
 import com.ex.data.DailyReportsDTO;
 import com.ex.entity.AttendanceEntity;
 import com.ex.entity.DailyReportsEntity;
+import com.ex.entity.DogsEntity;
 import com.ex.entity.MembersEntity;
 import com.ex.repository.AttendanceRepository;
 import com.ex.repository.DailyReportsRepository;
+import com.ex.repository.DogsRepository;
 import com.ex.repository.MembersRepository;
 import lombok.RequiredArgsConstructor;
 
@@ -22,6 +25,7 @@ public class DailyReportsService {
 
 	private final DailyReportsRepository dailyReportsRepository;
 	private final MembersRepository membersRepository;
+	private final DogsRepository dogsRepository;
 	
 	@Autowired
 	AttendanceService attendanceService;
@@ -84,15 +88,19 @@ public class DailyReportsService {
 	
 	// 알림장등록
 	public void create(DailyReportsDTO dailyReportsDTO, Integer attendanceId, String username, String selectDate) {
-//		LocalDate diarydate = LocalDate.parse(selectDate);
+		LocalDate diarydate = LocalDate.parse(selectDate);
+		
+//		강아지id 멤버id
+		MembersEntity membersEntity = membersRepository.findByUsername(username).get();
 		
 		// 출석부 상세조회
 		AttendanceEntity ae = attendanceRepository.findById(attendanceId).get();
+		System.out.println("ae.getDog() ::: " + ae.getDog());
 		
 		DailyReportsEntity de = DailyReportsEntity.builder()
-								.dogs(dailyReportsDTO.getDogs())
+								.dogs(ae.getDog())
 								.attendance(ae)
-								.report_date(dailyReportsDTO.getReport_date())
+								.report_date(diarydate)
 								.behavior(dailyReportsDTO.getBehavior())
 								.activities(dailyReportsDTO.getActivities())
 								.meals(dailyReportsDTO.getMeals())
@@ -100,7 +108,7 @@ public class DailyReportsService {
 								.bowel(dailyReportsDTO.getBowel())
 								.contents(dailyReportsDTO.getContents())
 								.title(dailyReportsDTO.getTitle())
-								.members(dailyReportsDTO.getMembers())
+								.members(membersEntity)
 								.build();
 		
 		de = dailyReportsRepository.save(de);
