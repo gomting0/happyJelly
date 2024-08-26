@@ -26,7 +26,8 @@ public class VaccinationsService {
 
     @Transactional
     public void saveVaccinationWithFile(VaccinationsDTO vaccinationDTO, MultipartFile file) {
-        String filename = profile(file);
+       
+    	String filename = profile(file);
         vaccinationDTO.setFilename(filename);
 
         VaccinationsEntity vaccination = convertToEntity(vaccinationDTO);
