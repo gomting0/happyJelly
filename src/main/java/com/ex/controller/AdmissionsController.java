@@ -55,8 +55,8 @@ public class AdmissionsController {
             
          // 대기 중인 입학 신청이 없는 강아지들을 저장할 리스트 초기화
             List<DogsEntity> dogsWithoutPendingAdmissions = new ArrayList<>();
-
-            // 각 지점의 ID를 키로, 해당 지점의 월별 케어 그룹 목록을 값으로 하는 Map 초기화
+            // 각 지점의 ID를 키로, 해당 지점의 월별 케어 그룹 목록을 값으로 하는 Map 초기
+            // Map에는 중복된 값이 들어갈 수 없다. List는 가능하다.
             Map<Integer, List<MonthcareGroupsDTO>> branchGroups = new HashMap<>();
 
             // 모든 지점에 대해 반복

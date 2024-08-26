@@ -20,28 +20,28 @@
                                 </a>
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-6" th:if="${!#authorization.expression('isAuthenticated()') or #authorization.expression('hasRole(''ROLE_USER'')')}">
                             <div class="d-grid">
                                 <a href="/dogs/myDogList" class="btn btn-warning btn-lg">
                                     <i class="fas fa-dog me-2"></i>내 강아지 정보
                                 </a>
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-6" th:if="${!#authorization.expression('isAuthenticated()') or #authorization.expression('hasRole(''ROLE_USER'')')}">
                             <div class="d-grid">
                                 <a href="/vaccinations/vaccinationsForm" class="btn btn-outline-success btn-lg">
                                     <i class="fas fa-syringe me-2"></i>백신접종등록
                                 </a>
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-6" th:if="${!#authorization.expression('isAuthenticated()') or #authorization.expression('hasRole(''ROLE_USER'')')}">
                             <div class="d-grid">
                                 <a href="/admissions/admissionsList" class="btn btn-warning btn-lg">
                                     <i class="fas fa-graduation-cap me-2"></i>입학 신청하기
                                 </a>
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-6" th:if="${!#authorization.expression('isAuthenticated()') or #authorization.expression('hasRole(''ROLE_USER'')')}">
                         	<div class="d-grid">
 	                            <a href="/subs/list" class="btn btn-outline-primary btn-lg">
 	                                <i class="fas fa-receipt me-2"></i>내 이용권 조회
