@@ -30,8 +30,8 @@ public class AdmissionsService {
     private final AdmissionsRepository admissionRepository;
     private final DogsRepository dogRepository;
     private final BranchesRepository branchRepository;
-    private final MonthcareGroupsService monthcareGroupsService;
     private final MembersRepository membersRepository;
+    private final MonthcareGroupsService monthcareGroupsService;
    
     @Transactional
     public void createAdmission(AdmissionsDTO admissionDTO) {
@@ -45,9 +45,6 @@ public class AdmissionsService {
             BranchEntity branch = branchRepository.findById(admissionDTO.getBranch().getBranchId())
                 .orElseThrow(() -> new RuntimeException("Branch not found with id: " + admissionDTO.getBranch().getBranchId()));
             log.info("Found branch: {}", branch);
-
-            MonthcareGroupsDTO groupDTO = monthcareGroupsService.getMonthGroup(admissionDTO.getMonthcaregroups().getId());
-            log.info("Found monthcare group: {}", groupDTO);
 
             AdmissionsEntity ae = AdmissionsEntity.builder()
                 .dogs(dog)
@@ -121,17 +118,6 @@ public class AdmissionsService {
         admissionRepository.save(admission);
     }
 
-    public Page<AdmissionsDTO> getAllAdmissionsPaginated(int page) {
-        Pageable pageable = PageRequest.of(page, 10, Sort.by("admissionId").descending());
-        Page<AdmissionsEntity> entityPage = admissionRepository.findAll(pageable);
-        return entityPage.map(this::convertToDTO);
-    }
-
-    public Page<AdmissionsDTO> getAdmissionsByUsernamePaginated(String username, int page) {
-        Pageable pageable = PageRequest.of(page, 10, Sort.by("admissionId").descending());
-        Page<AdmissionsEntity> entityPage = admissionRepository.findByDogs_Member_Username(username, pageable);
-        return entityPage.map(this::convertToDTO);
-    }
     
     public int checkPending(String status, Integer dog_id) {
         return admissionRepository.countByStatusAndDogs_DogId(status, dog_id);
@@ -143,12 +129,6 @@ public class AdmissionsService {
 
     public List<MonthcareGroupsDTO> getGroupsByBranch(Integer branchId) {
         return monthcareGroupsService.getMonthcareGroupByBranch(branchId);
-    }
-    
-    public Page<AdmissionsDTO> getAdmissionsByBranchPaginated(Integer branchId, int page) {
-        Pageable pageable = PageRequest.of(page, 10, Sort.by("admissionId").descending());
-        Page<AdmissionsEntity> entityPage = admissionRepository.findByBranch_BranchId(branchId, pageable);
-        return entityPage.map(this::convertToDTO);
     }
     
     public Page<AdmissionsDTO> getAdmissionsByRole(String username, int page, String status) {

@@ -53,17 +53,29 @@ public class AdmissionsController {
             List<BranchEntity> branches = admissionsService.getAllBranches();
             model.addAttribute("branches", branches);
             
+         // 대기 중인 입학 신청이 없는 강아지들을 저장할 리스트 초기화
             List<DogsEntity> dogsWithoutPendingAdmissions = new ArrayList<>();
+
+            // 각 지점의 ID를 키로, 해당 지점의 월별 케어 그룹 목록을 값으로 하는 Map 초기화
             Map<Integer, List<MonthcareGroupsDTO>> branchGroups = new HashMap<>();
+
+            // 모든 지점에 대해 반복
             for (BranchEntity branch : branches) {
+                // 현재 지점의 모든 월별 케어 그룹 정보를 가져옴
                 List<MonthcareGroupsDTO> groups = admissionsService.getGroupsByBranch(branch.getBranchId());
+                // 지점 ID를 키로, 해당 지점의 그룹 목록을 값으로 Map에 저장
                 branchGroups.put(branch.getBranchId(), groups);
             }
-            
+
+            // 사용자의 모든 강아지에 대해 반복
             for (DogsEntity dog : userDogs) {
+                // 현재 강아지의 모든 입학 신청 중 상태가 "PENDING"인 것이 있는지 확인
                 boolean hasPendingAdmission = dog.getAdmissions().stream()
-                        .anyMatch(admission -> admission.getStatus().equals("PENDING"));
+                    .anyMatch(admission -> admission.getStatus().equals("PENDING"));
+                
+                // 대기 중인 입학 신청이 없는 경우에만
                 if (!hasPendingAdmission) {
+                    // 해당 강아지를 새 리스트에 추가
                     dogsWithoutPendingAdmissions.add(dog);
                 }
             }
@@ -78,14 +90,12 @@ public class AdmissionsController {
         
         @PostMapping("/create")
         @PreAuthorize("isAuthenticated()")
-        public String createAdmission(@ModelAttribute AdmissionsDTO admissionDTO, RedirectAttributes redirectAttributes) {
+        public String createAdmission(@ModelAttribute AdmissionsDTO admissionDTO) {
             try {
                 admissionsService.createAdmission(admissionDTO);
-                redirectAttributes.addFlashAttribute("successMessage", "입학 신청이 성공적으로 완료되었습니다.");
                 return "redirect:/admissions/admissionsList";
                 
-            } catch (RuntimeException e) {
-                redirectAttributes.addFlashAttribute("errorMessage", "입학 신청 중 오류가 발생했습니다: " + e.getMessage());
+            } catch (Exception ex) {
                 return "redirect:/admissions";
             }
         }
