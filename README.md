@@ -6,6 +6,10 @@ Happy Jelly는 반려견 유치원을 운영하는 데 필요한 모든 기능�
 
 이 프로젝트는 Spring Boot를 기반으로 한 백엔드 시스템과 Oracle Database를 사용하여 데이터를 안전하게 저장 및 처리할 수 있도록 했습니다. 사용자 친화적인 인터페이스와 관리 도구를 제공하여 유치원 관리자들이 쉽고 빠르게 반려견과 관련된 데이터를 처리할 수 있도록 지원합니다.
 
+## 프로젝트 기간
+
+2024/07/03 - 2024/08/23 (약 8주)
+
 ## 프로젝트 목표
 
 Happy Jelly 프로젝트는 다음과 같은 목표를 가지고 개발되었습니다:
@@ -42,12 +46,6 @@ Happy Jelly 프로젝트는 다음과 같은 목표를 가지고 개발되었습
 - **ATTENDANCE**: 출석 정보 저장
 - **VACCINATIONS**: 백신 접종 기록 저장
 
-##프로젝트 기간
-- **2024/07/03 - 2024/08/23 (약 8주)
-
-
-
-
 ### 샘플 쿼리
 
 ```sql
@@ -58,6 +56,3 @@ SELECT * FROM MEMBERS WHERE username = 'example_user';
 SELECT * FROM ATTENDANCE 
 WHERE dog_id = 1 
 ORDER BY attendance_date DESC;
-
-
-
