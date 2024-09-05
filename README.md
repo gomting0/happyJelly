@@ -54,5 +54,5 @@ WHERE dog_id = 1
 ORDER BY attendance_date DESC;
 
 
--- 프로젝트 기간
+##프로젝트 기간
 2024/07/03 - 2024/08/23 (약 8주)
